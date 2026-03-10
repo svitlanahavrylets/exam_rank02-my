@@ -17,28 +17,31 @@ char    **ft_split(char *str);
 
 */
 
+# include <stdio.h>
 #include <stdlib.h>
 
-int is_delimiter(char c)
+int	is_delimiter(char c)
 {
-    if (c == 9 || c == 10 || c == 32)
-        return (1);
-    return (0);
+	if (c == 9 || c == 10 || c == 32 )
+		return (1);
+	return (0);
 }
 
-int	count_words(char *str)
+int	count_word(char *str)
 {
-	int	count = 0;
-	int	i = 0;
+	int	i;
+	int	count;
 
+	i = 0;
+	count = 0;
 	while (str[i])
 	{
-		while (str[i] && is_delimiter(str[i]))
+		while (str[i] && is_delimiter(str[i]) == 1)
 			i++;
 		if (str[i])
 		{
 			count++;
-			while (str[i] && !is_delimiter(str[i]))
+			while (str[i] && is_delimiter(str[i]) == 0)
 				i++;
 		}
 	}
@@ -48,38 +51,65 @@ int	count_words(char *str)
 char	**ft_split(char *str)
 {
 	char	**result;
-	int		i = 0;
-	int		k = 0;
-    int		j;
 	int		word_len;
+	int		i;
+	int		k;
+	int		j;
 
-	result = (char **)malloc(sizeof(char *) * (count_words(str) + 1));
+	i = 0;
+	printf("count_world: %d\n", count_word(str));
+	result = malloc(sizeof(char*) * (count_word(str) + 1));
 	if (!result)
 		return (NULL);
-
+	j = 0;
+	k = 0;
 	while (str[i])
 	{
-		while (str[i] && is_delimiter(str[i]))
+		while (str[i] && is_delimiter(str[i]) == 1)
 			i++;
 		if (str[i])
 		{
 			word_len = 0;
-			while (str[i + word_len] && !is_delimiter(str[i + word_len]))
+			while (str[i + word_len] && is_delimiter(str[i + word_len]) == 0)
 				word_len++;
-			result[k] = (char *)malloc(sizeof(char) * (word_len + 1));
+			result[k] = malloc(sizeof(char) * (word_len + 1));
 			if (!result[k])
 				return (NULL);
 			j = 0;
 			while (j < word_len)
-            {
-                result[k][j] = str[i];
-                i++;
-                j++;
-            }
+			{
+				result[k][j] = str[i];
+				j++;
+				i++;
+
+			}
 			result[k][j] = '\0';
 			k++;
 		}
 	}
-	result[k] = NULL; 
+	result[k] = NULL;
 	return (result);
+}
+
+
+int	main(void)
+{
+	char **res;
+	int i;
+
+	// res = ft_split("   ");
+	// res = ft_split("");
+	res = ft_split("13kj kfh !  vf  B");
+	// res = ft_split(" hi  ");
+	if (!res)
+		return (0);
+	i = 0;
+	while (res[i])
+	{
+		printf("word: %s\n", res[i]);
+		free(res[i]);
+		i++;
+	}
+	free(res);
+	return (0);
 }
